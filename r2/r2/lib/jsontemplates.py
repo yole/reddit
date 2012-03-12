@@ -183,6 +183,10 @@ class ThingJsonTemplate(JsonTemplate):
                     - time.timezone)
         elif attr == "child":
             return CachedVariable("childlisting")
+        elif attr == "num_reports":
+            if c.user_is_loggedin and thing.subreddit.is_moderator(c.user):
+                return thing.reported
+            return None
         return getattr(thing, attr, None)
 
     def data(self, thing):
@@ -270,6 +274,7 @@ class LinkJsonTemplate(ThingJsonTemplate):
                                                 selftext     = "selftext",
                                                 selftext_html= "selftext_html",
                                                 num_comments = "num_comments",
+                                                num_reports  = "num_reports",
                                                 subreddit    = "subreddit",
                                                 subreddit_id = "subreddit_id",
                                                 is_self      = "is_self", 
@@ -329,6 +334,7 @@ class CommentJsonTemplate(ThingJsonTemplate):
                                                 link_id      = "link_id",
                                                 subreddit    = "subreddit",
                                                 subreddit_id = "subreddit_id",
+                                                num_reports  = "num_reports",
                                                 parent_id    = "parent_id",
                                                 )
 
