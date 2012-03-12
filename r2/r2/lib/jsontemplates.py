@@ -183,10 +183,17 @@ class ThingJsonTemplate(JsonTemplate):
                     - time.timezone)
         elif attr == "child":
             return CachedVariable("childlisting")
-        elif attr == "num_reports":
+
+        if attr in ["num_reports", "banned_by", "approved_by"]:
             if c.user_is_loggedin and thing.subreddit.is_moderator(c.user):
-                return thing.reported
-            return None
+                if attr == "num_reports":
+                    return thing.reported
+                ban_info = getattr(thing, "ban_info", {})
+                if attr == "banned_by":
+                    return ban_info.get("banner")
+                elif attr == "approved_by":
+                    return ban_info.get("unbanner")
+
         return getattr(thing, attr, None)
 
     def data(self, thing):
@@ -275,6 +282,8 @@ class LinkJsonTemplate(ThingJsonTemplate):
                                                 selftext_html= "selftext_html",
                                                 num_comments = "num_comments",
                                                 num_reports  = "num_reports",
+                                                banned_by    = "banned_by",
+                                                approved_by  = "approved_by",
                                                 subreddit    = "subreddit",
                                                 subreddit_id = "subreddit_id",
                                                 is_self      = "is_self", 
@@ -335,6 +344,8 @@ class CommentJsonTemplate(ThingJsonTemplate):
                                                 subreddit    = "subreddit",
                                                 subreddit_id = "subreddit_id",
                                                 num_reports  = "num_reports",
+                                                banned_by    = "banned_by",
+                                                approved_by  = "approved_by",
                                                 parent_id    = "parent_id",
                                                 )
 
