@@ -57,4 +57,7 @@ api('takedownpane', TakedownJsonTemplate)
 api('flairlist', FlairListJsonTemplate)
 api('flaircsv', FlairCsvJsonTemplate)
 
+api('modactionlisting', ModActionListingJsonTemplate)
+api('modaction', ModActionJsonTemplate)
+
 tpm.add_handler('usertableitem', 'api-html', UserItemHTMLJsonTemplate())
