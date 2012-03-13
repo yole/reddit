@@ -555,11 +555,7 @@ class ModActionJsonTemplate(ThingJsonTemplate):
                         moderator="moderator",
                         subreddit="subreddit",
                         action="action",
-                        target_fullname="target_fullname",
-                        target_text="target_text",
-                        target_path="target_path",
-                        target_name="target_name",
-                        target_user_name="target_user_name",
+                        target="target",
                         details="details",
                         description="description")
 
@@ -573,10 +569,11 @@ class ModActionJsonTemplate(ThingJsonTemplate):
             return Subreddit._byID36(thing.sr_id36).name
         elif attr == "date":
             return time.mktime(thing.date.timetuple())
-        elif attr == "target_user_name":
-            if hasattr(thing, "target_wrapped_user"):
-                return thing.target_wrapped_user.name
-            return None
+        elif attr == "target":
+            result = dict((key, getattr(thing.target, key, None))
+                                for key in ["_fullname", "name", "url", "author", "title"])
+            result["author"] = getattr(thing, "target_author", None)
+            return result
 
         return ThingJsonTemplate.thing_attr(self, thing, attr)
 
